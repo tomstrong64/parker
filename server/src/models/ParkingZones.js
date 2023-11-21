@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import dayjs from 'dayjs';
 
-const ParkingSectionSchema = new Schema(
+const ParkingZoneSchema = new Schema(
     {
         name: String,
         parked: { type: Date, default: null },
@@ -18,7 +18,7 @@ const ParkingSectionSchema = new Schema(
     }
 );
 
-ParkingSectionSchema.virtual('endTime').get(function () {
+ParkingZoneSchema.virtual('endTime').get(function () {
     const parked = dayjs(this.parked);
     const endTime = parked.add(this.restrictions.time_limit, 'minute');
 
@@ -39,7 +39,7 @@ ParkingSectionSchema.virtual('endTime').get(function () {
     return endTime;
 });
 
-ParkingSectionSchema.virtual('timeRemaining').get(function () {
+ParkingZoneSchema.virtual('timeRemaining').get(function () {
     const endTime = this.endTime;
     // return the amount of hours until the endTime
     const minsRemaining = endTime.diff(dayjs(), 'minute');
@@ -48,7 +48,4 @@ ParkingSectionSchema.virtual('timeRemaining').get(function () {
     return `${hours} hours ${minutes} minutes`;
 });
 
-export const ParkingSections = mongoose.model(
-    'parkingSections',
-    ParkingSectionSchema
-);
+export const ParkingZones = mongoose.model('parkingZones', ParkingZoneSchema);

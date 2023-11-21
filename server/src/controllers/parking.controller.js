@@ -1,39 +1,35 @@
 import dayjs from 'dayjs';
 
-import { ParkingSections } from '../models/ParkingSections.js';
+import { ParkingZones } from '../models/ParkingZones.js';
 
-export const getSections = async (req, res, next) => {
-    const parkingSection = await ParkingSections.find();
-    return res.json(parkingSection);
+export const getZones = async (req, res, next) => {
+    const parkingZone = await ParkingZones.find();
+    return res.json(parkingZone);
 };
 
-export const createSection = async (req, res, next) => {
-    const newSection = await ParkingSections.create(req.body);
-    return res.status(201).json(newSection);
+export const createZone = async (req, res, next) => {
+    const newZone = await ParkingZones.create(req.body);
+    return res.status(201).json(newZone);
 };
 
 export const beginParking = async (req, res, next) => {
     const { id } = req.params;
-    const section = await ParkingSections.findById(id);
-    section.parked = dayjs().toDate();
-    await section.save();
-    return res
-        .status(200)
-        .json({
-            endTime: section.endTime,
-            timeRemaining: section.timeRemaining,
-        });
+    const zone = await ParkingZones.findById(id);
+    zone.parked = dayjs().toDate();
+    await zone.save();
+    return res.status(200).json({
+        endTime: zone.endTime,
+        timeRemaining: zone.timeRemaining,
+    });
 };
 
 export const checkParking = async (req, res, next) => {
-    const section = await ParkingSections.findOne({
+    const zone = await ParkingZones.findOne({
         parked: { $ne: null },
     }).sort({ parked: -1 });
 
-    return res
-        .status(200)
-        .json({
-            endTime: section.endTime,
-            timeRemaining: section.timeRemaining,
-        });
+    return res.status(200).json({
+        endTime: zone.endTime,
+        timeRemaining: zone.timeRemaining,
+    });
 };
