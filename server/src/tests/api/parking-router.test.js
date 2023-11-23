@@ -51,3 +51,11 @@ describe('GET /api/parking', () => {
         expect(response.body.endTime).toBeDefined();
     });
 });
+
+describe('PUT /api/parking/park/end', () => {
+    it('Should end parking and return 200', async () => {
+        const response = await request(global.app).put('/api/parking/park/end');
+
+        expect(response.statusCode).toBe(200);
+    });
+});
