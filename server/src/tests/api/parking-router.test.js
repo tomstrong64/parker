@@ -34,8 +34,6 @@ describe('POST /api/parking/park/:id', () => {
             `/api/parking/park/${global.ids[0]}`
         );
 
-        console.log(response.body);
-
         expect(response.statusCode).toBe(200);
         expect(response.body.endTime).toBeDefined();
     });
@@ -44,8 +42,6 @@ describe('POST /api/parking/park/:id', () => {
 describe('GET /api/parking', () => {
     it('Should return the end time for the current parking zone', async () => {
         const response = await request(global.app).get('/api/parking');
-
-        console.log(response.body);
 
         expect(response.statusCode).toBe(200);
         expect(response.body.endTime).toBeDefined();
@@ -57,5 +53,13 @@ describe('PUT /api/parking/park/end', () => {
         const response = await request(global.app).put('/api/parking/park/end');
 
         expect(response.statusCode).toBe(200);
+    });
+});
+
+describe('GET /api/parking', () => {
+    it('Should return 404', async () => {
+        const response = await request(global.app).get('/api/parking');
+
+        expect(response.statusCode).toBe(404);
     });
 });
