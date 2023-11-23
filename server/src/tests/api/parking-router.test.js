@@ -6,6 +6,8 @@ describe('POST /api/parking/zone', () => {
             .post('/api/parking/zone')
             .send({
                 name: 'Milton Road',
+                lat: 50.9147727,
+                lon: -1.4071117,
                 restrictions: {
                     time_limit: 120,
                     days: [
