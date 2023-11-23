@@ -60,8 +60,23 @@ export const checkParking = async (req, res, next) => {
         createdAt: -1,
     });
 
+    if (!zone) return res.status(404).json({ error: 'No parking found' });
+
     return res.status(200).json({
         endTime: zone.until,
         timeRemaining: zone.timeRemaining,
     });
+};
+
+export const endParking = async (req, res, next) => {
+    const zone = await ParkingHistory.findOne({ end: null }).sort({
+        createdAt: -1,
+    });
+
+    if (!zone) return res.status(404).json({ error: 'No parking found' });
+
+    zone.end = dayjs();
+    await zone.save();
+
+    return res.status(200).json({ message: 'Parking ended' });
 };
