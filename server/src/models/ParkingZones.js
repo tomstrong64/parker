@@ -4,6 +4,8 @@ import dayjs from 'dayjs';
 const ParkingZoneSchema = new Schema(
     {
         name: String,
+        lat: Number,
+        lon: Number,
         restrictions: {
             time_limit: Number, // minutes
             days: [String], // days of the week
