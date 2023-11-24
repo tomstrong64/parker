@@ -33,4 +33,4 @@ jobs:
               working-directory: server
               run: npm test
               env:
-                  MONGODB_URI: mongodb://admin:admin@localhost:27017/parker?authSource=admin
+                  MONGODB_TEST_URI: mongodb://admin:admin@localhost:27017/Parker-Test?authSource=admin
