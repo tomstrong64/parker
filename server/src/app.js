@@ -2,6 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 
 import APIRouter from './routes/api.router.js';
+import HealthRouter from './routes/health.router.js';
 
 // TODO: figure out why the fuck this is necessary
 import path, { dirname } from 'path';
@@ -20,5 +21,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api', APIRouter);
+app.use('/health', HealthRouter);
 
 export default app;

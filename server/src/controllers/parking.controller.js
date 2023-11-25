@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 
 import { ParkingZones } from '../models/ParkingZones.js';
 import { ParkingHistory } from '../models/ParkingHistory.js';
+import humanInterval from 'human-interval';
 
 export const getZones = async (req, res, next) => {
     const parkingZone = await ParkingZones.find();
@@ -52,6 +53,7 @@ export const beginParking = async (req, res, next) => {
     return res.status(200).json({
         endTime: parking.until,
         timeRemaining: parking.timeRemaining,
+        ms: humanInterval(zone.timeRemaining),
     });
 };
 
@@ -65,6 +67,7 @@ export const checkParking = async (req, res, next) => {
     return res.status(200).json({
         endTime: zone.until,
         timeRemaining: zone.timeRemaining,
+        ms: humanInterval(zone.timeRemaining),
     });
 };
 

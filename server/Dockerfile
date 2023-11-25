@@ -7,7 +7,7 @@ ENV NODE_ENV=production
 RUN npm ci --omit=dev
 
 
-FROM node:20.9.0-bookworm-slim
+FROM node:20.10.0-bookworm-slim
 
 ENV NODE_ENV=production
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
