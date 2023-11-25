@@ -37,7 +37,7 @@ describe('POST /api/parking/park/:id', () => {
         );
 
         expect(response.statusCode).toBe(200);
-        expect(response.body.endTime).toBeDefined();
+        expect(response.body.remaining_mins).toBeDefined();
     });
 });
 
@@ -46,7 +46,7 @@ describe('GET /api/parking', () => {
         const response = await request(global.app).get('/api/parking');
 
         expect(response.statusCode).toBe(200);
-        expect(response.body.endTime).toBeDefined();
+        expect(response.body.remaining_mins).toBeDefined();
     });
 });
 

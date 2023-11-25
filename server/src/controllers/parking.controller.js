@@ -51,23 +51,21 @@ export const beginParking = async (req, res, next) => {
     });
 
     return res.status(200).json({
-        endTime: parking.until,
-        timeRemaining: parking.timeRemaining,
-        ms: humanInterval(zone.timeRemaining),
+        remaining_mins: parking.remaining_mins,
+        notify_mins: parking.notify_mins,
     });
 };
 
 export const checkParking = async (req, res, next) => {
-    const zone = await ParkingHistory.findOne({ end: null }).sort({
+    const parking = await ParkingHistory.findOne({ end: null }).sort({
         createdAt: -1,
     });
 
-    if (!zone) return res.status(404).json({ error: 'No parking found' });
+    if (!parking) return res.status(404).json({ error: 'No parking found' });
 
     return res.status(200).json({
-        endTime: zone.until,
-        timeRemaining: zone.timeRemaining,
-        ms: humanInterval(zone.timeRemaining),
+        remaining_mins: parking.remaining_mins,
+        notify_mins: parking.notify_mins,
     });
 };
 
