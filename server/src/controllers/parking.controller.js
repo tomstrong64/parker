@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 
 import { ParkingZones } from '../models/ParkingZones.js';
 import { ParkingHistory } from '../models/ParkingHistory.js';
+import humanInterval from 'human-interval';
 
 export const getZones = async (req, res, next) => {
     const parkingZone = await ParkingZones.find();
@@ -14,6 +15,7 @@ export const createZone = async (req, res, next) => {
 };
 
 export const beginParking = async (req, res, next) => {
+    // TODO: check id is valid
     const { id } = req.params;
     // check zone exists
     const zone = await ParkingZones.findById(id);
@@ -50,21 +52,27 @@ export const beginParking = async (req, res, next) => {
     });
 
     return res.status(200).json({
-        endTime: parking.until,
-        timeRemaining: parking.timeRemaining,
+        end_time: parking.until,
+        remaining_mins: parking.remaining_mins,
+        notify_mins: parking.notify_mins,
+        zone: zone.name,
     });
 };
 
 export const checkParking = async (req, res, next) => {
-    const zone = await ParkingHistory.findOne({ end: null }).sort({
-        createdAt: -1,
-    });
+    const parking = await ParkingHistory.findOne({ end: null })
+        .sort({
+            createdAt: -1,
+        })
+        .populate('zone');
 
-    if (!zone) return res.status(404).json({ error: 'No parking found' });
+    if (!parking) return res.status(404).json({ error: 'No parking found' });
 
     return res.status(200).json({
-        endTime: zone.until,
-        timeRemaining: zone.timeRemaining,
+        end_time: parking.until,
+        remaining_mins: parking.remaining_mins,
+        notify_mins: parking.notify_mins,
+        zone: parking.zone.name,
     });
 };
 
@@ -79,4 +87,22 @@ export const endParking = async (req, res, next) => {
     await zone.save();
 
     return res.status(200).json({ message: 'Parking ended' });
+};
+
+export const getAvailableZones = async (req, res, next) => {
+    const parkingToday = await ParkingHistory.find({
+        end: { $gte: dayjs().startOf('day') },
+    });
+
+    const usedZones = parkingToday.map((parking) => parking.zone);
+
+    const availableZones = await ParkingZones.find({
+        _id: { $nin: usedZones },
+    });
+
+    return res
+        .status(200)
+        .json(
+            availableZones.map((zone) => ({ _id: zone._id, name: zone.name }))
+        );
 };

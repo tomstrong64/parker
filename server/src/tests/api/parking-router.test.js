@@ -30,35 +30,35 @@ describe('POST /api/parking/zone', () => {
     });
 });
 
-describe('POST /api/parking/park/:id', () => {
+describe('POST /api/parking/start/:id', () => {
     it('Should return park end time', async () => {
         const response = await request(global.app).post(
-            `/api/parking/park/${global.ids[0]}`
+            `/api/parking/start/${global.ids[0]}`
         );
 
         expect(response.statusCode).toBe(200);
-        expect(response.body.endTime).toBeDefined();
+        expect(response.body.remaining_mins).toBeDefined();
     });
 });
 
-describe('GET /api/parking', () => {
+describe('GET /api/parking/status', () => {
     it('Should return the end time for the current parking zone', async () => {
-        const response = await request(global.app).get('/api/parking');
+        const response = await request(global.app).get('/api/parking/status');
 
         expect(response.statusCode).toBe(200);
-        expect(response.body.endTime).toBeDefined();
+        expect(response.body.remaining_mins).toBeDefined();
     });
 });
 
-describe('PUT /api/parking/park/end', () => {
+describe('PUT /api/parking/end', () => {
     it('Should end parking and return 200', async () => {
-        const response = await request(global.app).put('/api/parking/park/end');
+        const response = await request(global.app).put('/api/parking/end');
 
         expect(response.statusCode).toBe(200);
     });
 });
 
-describe('GET /api/parking', () => {
+describe('GET /api/parking/status', () => {
     it('Should return 404', async () => {
         const response = await request(global.app).get('/api/parking');
 
