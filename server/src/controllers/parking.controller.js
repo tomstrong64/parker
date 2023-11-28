@@ -15,6 +15,7 @@ export const createZone = async (req, res, next) => {
 };
 
 export const beginParking = async (req, res, next) => {
+    // TODO: check id is valid
     const { id } = req.params;
     // check zone exists
     const zone = await ParkingZones.findById(id);
@@ -51,21 +52,27 @@ export const beginParking = async (req, res, next) => {
     });
 
     return res.status(200).json({
+        end_time: parking.until,
         remaining_mins: parking.remaining_mins,
         notify_mins: parking.notify_mins,
+        zone: zone.name,
     });
 };
 
 export const checkParking = async (req, res, next) => {
-    const parking = await ParkingHistory.findOne({ end: null }).sort({
-        createdAt: -1,
-    });
+    const parking = await ParkingHistory.findOne({ end: null })
+        .sort({
+            createdAt: -1,
+        })
+        .populate('zone');
 
     if (!parking) return res.status(404).json({ error: 'No parking found' });
 
     return res.status(200).json({
+        end_time: parking.until,
         remaining_mins: parking.remaining_mins,
         notify_mins: parking.notify_mins,
+        zone: parking.zone.name,
     });
 };
 
