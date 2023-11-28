@@ -3,8 +3,8 @@ import { useCountdown } from '../hooks/useCountdown';
 export function CountdownTimer({ endTime }) {
     const [days, hours, minutes, seconds] = useCountdown(endTime);
 
-    if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
-        return <h3>Time's up!</h3>;
+    if (days === 0 && hours === 0 && minutes === 0) {
+        return <h3>Parking Expired!</h3>;
     }
 
     return (
