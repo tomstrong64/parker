@@ -81,3 +81,21 @@ export const endParking = async (req, res, next) => {
 
     return res.status(200).json({ message: 'Parking ended' });
 };
+
+export const getAvailableZones = async (req, res, next) => {
+    const parkingToday = await ParkingHistory.find({
+        end: { $gte: dayjs().startOf('day') },
+    });
+
+    const usedZones = parkingToday.map((parking) => parking.zone);
+
+    const availableZones = await ParkingZones.find({
+        _id: { $nin: usedZones },
+    });
+
+    return res
+        .status(200)
+        .json(
+            availableZones.map((zone) => ({ _id: zone._id, name: zone.name }))
+        );
+};
