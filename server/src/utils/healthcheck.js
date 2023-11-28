@@ -1,5 +1,5 @@
 (async () => {
-    const response = await fetch('http://localhost:3000/health');
+    const response = await fetch('http://localhost:3001/health');
 
     if (response.status !== 200) {
         console.log(await response.json());
