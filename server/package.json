@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon ./src/bin/www.js",
+        "start": "node ./src/bin/www.js",
+        "dev": "nodemon ./src/bin/www.js",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
-        "prod": "node ./src/bin/www.js",
         "healthcheck": "node ./src/utils/healthcheck.js"
     },
     "keywords": [],

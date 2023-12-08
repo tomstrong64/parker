@@ -30,4 +30,4 @@ COPY --chown=node:node ./package*.json /usr/src/app/
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 CMD npm run healthcheck
 
-CMD ["dumb-init", "npm", "run", "prod"]
+CMD ["dumb-init", "npm", "start"]
