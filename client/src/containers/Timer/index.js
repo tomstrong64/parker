@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import './App.css';
-import { CountdownTimer } from './components/CountdownTimer';
 
-function App() {
+import { CountdownTimer } from '../../components/CountdownTimer';
+
+export function Home() {
     const [zone, setZone] = useState(null);
     const [endTime, setEndTime] = useState(null);
     const [availableZones, setAvailableZones] = useState([]);
 
     useEffect(() => {
         getParkingStatus();
-    }, []);
+    });
 
     const getParkingStatus = async () => {
         const res = await fetch('/api/parking/status');
@@ -53,31 +53,25 @@ function App() {
     };
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <h1>PARKER</h1>
-
-                {!zone ? (
-                    <ul>
-                        {availableZones.map((zone) => (
-                            <li key={zone._id}>
-                                {zone.name}{' '}
-                                <button onClick={() => startParking(zone._id)}>
-                                    Start Parking
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <div>
-                        <h3>Parked At: {zone}</h3>
-                        <CountdownTimer endTime={endTime} />
-                        <button onClick={endParking}>End Parking</button>
-                    </div>
-                )}
-            </header>
+        <div>
+            {!zone ? (
+                <ul>
+                    {availableZones.map((zone) => (
+                        <li key={zone._id}>
+                            {zone.name}{' '}
+                            <button onClick={() => startParking(zone._id)}>
+                                Start Parking
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <div>
+                    <h3>Parked At: {zone}</h3>
+                    <CountdownTimer endTime={endTime} />
+                    <button onClick={endParking}>End Parking</button>
+                </div>
+            )}
         </div>
     );
 }
-
-export default App;
