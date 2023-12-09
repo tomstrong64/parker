@@ -103,6 +103,11 @@ export const getAvailableZones = async (req, res, next) => {
     return res
         .status(200)
         .json(
-            availableZones.map((zone) => ({ _id: zone._id, name: zone.name }))
+            availableZones.map((zone) => ({
+                _id: zone._id,
+                name: zone.name,
+                lat: zone.lat,
+                lon: zone.lon,
+            }))
         );
 };

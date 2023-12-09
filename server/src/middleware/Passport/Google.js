@@ -9,7 +9,7 @@ const Strategy = new GoogleStrategy(
         callbackURL: '/auth/google/callback',
     },
     async (accessToken, refreshToken, profile, done) => {
-        const user = User.findOne({ 'google.id': profile.id });
+        const user = await User.findOne({ 'google.id': profile.id });
 
         if (!user) {
             await User.create({

@@ -4,6 +4,8 @@ import * as AuthController from '../controllers/auth.controller.js';
 
 const router = Router();
 
+router.get('/logout', AuthController.logout);
+
 router.get(
     '/google',
     passport.authenticate('google', { scope: ['email', 'profile'] })

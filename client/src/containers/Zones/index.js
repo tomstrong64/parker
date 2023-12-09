@@ -1,11 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-export function Zones() {
-    const [center, setCenter] = useState([51.505, -0.09]);
+export function Zones({ start }) {
+    const [center, setCenter] = useState([50.9144001, -1.4118698]);
+    const [availableZones, setAvailableZones] = useState([]);
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            console.log(position.coords.latitude, position.coords.longitude);
+            setCenter([position.coords.latitude, position.coords.longitude]);
+        });
+
+        getAvailableZones();
+    }, []);
+
+    const getAvailableZones = async () => {
+        const res = await fetch('/api/parking/available');
+        const data = await res.json();
+
+        setAvailableZones(data);
+    };
 
     const addZone = async () => {
-        const res = await fetch('/api/zone', {
+        // TODO: Add zone to database
+        /* const res = await fetch('/api/zone', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -14,15 +32,27 @@ export function Zones() {
                 name: 'Zone 4',
             }),
         });
-        const data = await res.json();
-        console.log(data);
+        const data = await res.json(); */
     };
+
+    const zoneMarkers = availableZones.map((zone) => {
+        return (
+            <Marker key={zone._id} position={[zone.lat, zone.lon]}>
+                <Popup>
+                    <h3>{zone.name}</h3>
+                    <p onClick={() => start(zone._id)}>
+                        Click to start parking here
+                    </p>
+                </Popup>
+            </Marker>
+        );
+    });
 
     return (
         <div className="Content">
             <MapContainer
                 center={center}
-                zoom={13}
+                zoom={15}
                 scrollWheelZoom={false}
                 className="map"
             >
@@ -30,18 +60,13 @@ export function Zones() {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                <Marker position={[51.505, -0.09]}>
-                    <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
-                </Marker>
 
-                <div className="mapUI">
-                    <div className="buttonBanner">
-                        <button onClick={addZone} className="button">
-                            Add Zone
-                        </button>
-                    </div>
+                {zoneMarkers}
+
+                <div className="buttonBanner">
+                    <button onClick={addZone} className="button">
+                        Add Zone
+                    </button>
                 </div>
             </MapContainer>
         </div>

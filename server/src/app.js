@@ -1,13 +1,15 @@
 import express from 'express';
 import helmet from 'helmet';
 
-import cookieParser from 'cookie-parser';
+import cors from 'cors';
+
 import session from 'express-session';
 import passport from 'passport';
 import Google from './middleware/Passport/Google.js';
 
-import APIRouter from './routes/api.router.js';
 import AuthRouter from './routes/auth.router.js';
+import UserRouter from './routes/user.router.js';
+import APIRouter from './routes/api.router.js';
 import HealthRouter from './routes/health.router.js';
 
 // TODO: figure out why the fuck this is necessary
@@ -19,40 +21,48 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+
 app.use(helmet());
 
-app.use(express.static(path.join(__dirname, '../client/build')));
+passport.use(Google);
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-app.use(cookieParser());
 app.use(
     session({
         secret: process.env.SESSION_SECRET,
-        resave: false,
+        resave: true,
         saveUninitialized: true,
-        cookie: {
-            maxAge: 1000 * 60 * 60 * 24 * 14, // 2 weeks
-        },
     })
 );
-
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser((user, done) => {
-    done(null, user);
+function ensureAuth(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    return res.sendStatus(401);
+}
+
+// CSP to allow leaflet script and css to be loaded into client
+app.use((req, res, next) => {
+    res.setHeader(
+        'Content-Security-Policy',
+        "script-src 'self' https://unpkg.com; style-src 'self' https://unpkg.com;"
+    );
+    next();
 });
+// serve client files
+app.use(express.static(path.join(__dirname, '../client/build')));
 
-passport.deserializeUser((user, done) => {
-    done(null, user);
-});
+// handle json and form data
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-passport.use(Google);
-
+// routes
 app.use('/auth', AuthRouter);
-app.use('/api', APIRouter);
+app.use('/user', ensureAuth, UserRouter);
+app.use('/api', ensureAuth, APIRouter);
 app.use('/health', HealthRouter);
 
 export default app;
