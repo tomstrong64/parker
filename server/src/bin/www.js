@@ -6,7 +6,6 @@ import {} from 'dotenv/config';
 import app from '../app.js';
 
 console.log(`Starting as ${process.env.NODE_ENV}`);
-console.log(process.env);
 
 // connet to db
 await mongoose.connect(process.env.MONGODB_URI, {
