@@ -2,11 +2,15 @@ import './App.css';
 
 import { useEffect, useState } from 'react';
 
+import { Login } from './containers/Login';
 import { Timer } from './containers/Timer';
 import { Zones } from './containers/Zones';
 
+import { useAuth } from './context/AuthContext';
+
 function App() {
     const [parking, setParking] = useState(null);
+    const { user, logout } = useAuth();
 
     useEffect(() => {
         getParkingStatus();
@@ -51,12 +55,16 @@ function App() {
         <div className="App">
             <header className="Header">
                 <h1>PARKER</h1>
-                <button>Logout</button>
+                <button onClick={logout}>Logout</button>
             </header>
-            {parking ? (
-                <Timer parking={parking} />
+            {user ? (
+                parking ? (
+                    <Timer parking={parking} />
+                ) : (
+                    <Zones start={startParking} />
+                )
             ) : (
-                <Zones start={startParking} />
+                <Login />
             )}
             <footer className="Footer"></footer>
         </div>
