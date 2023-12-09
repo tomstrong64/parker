@@ -21,8 +21,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
-
 app.use(helmet());
 
 passport.use(Google);

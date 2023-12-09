@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const logout = async () => {
-        await fetch('/user/logout', {
+        await fetch('/auth/logout', {
             method: 'POST',
         });
         setUser(null);
