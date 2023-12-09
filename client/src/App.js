@@ -55,7 +55,7 @@ function App() {
         <div className="App">
             <header className="Header">
                 <h1>PARKER</h1>
-                <button onClick={logout}>Logout</button>
+                {user ? <button onClick={logout}>Logout</button> : null}
             </header>
             {user ? (
                 parking ? (

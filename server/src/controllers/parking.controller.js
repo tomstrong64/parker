@@ -46,6 +46,7 @@ export const beginParking = async (req, res, next) => {
 
     // begin parking
     const parking = await ParkingHistory.create({
+        user: req.user._id,
         zone: id,
         startTime: now,
         until,
@@ -60,7 +61,10 @@ export const beginParking = async (req, res, next) => {
 };
 
 export const checkParking = async (req, res, next) => {
-    const parking = await ParkingHistory.findOne({ end: null })
+    const parking = await ParkingHistory.findOne({
+        user: req.user._id,
+        end: null,
+    })
         .sort({
             createdAt: -1,
         })
@@ -77,7 +81,10 @@ export const checkParking = async (req, res, next) => {
 };
 
 export const endParking = async (req, res, next) => {
-    const zone = await ParkingHistory.findOne({ end: null }).sort({
+    const zone = await ParkingHistory.findOne({
+        user: req.user._id,
+        end: null,
+    }).sort({
         createdAt: -1,
     });
 
@@ -91,6 +98,7 @@ export const endParking = async (req, res, next) => {
 
 export const getAvailableZones = async (req, res, next) => {
     const parkingToday = await ParkingHistory.find({
+        user: req.user._id,
         end: { $gte: dayjs().startOf('day') },
     });
 
@@ -100,14 +108,12 @@ export const getAvailableZones = async (req, res, next) => {
         _id: { $nin: usedZones },
     });
 
-    return res
-        .status(200)
-        .json(
-            availableZones.map((zone) => ({
-                _id: zone._id,
-                name: zone.name,
-                lat: zone.lat,
-                lon: zone.lon,
-            }))
-        );
+    return res.status(200).json(
+        availableZones.map((zone) => ({
+            _id: zone._id,
+            name: zone.name,
+            lat: zone.lat,
+            lon: zone.lon,
+        }))
+    );
 };

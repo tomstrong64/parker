@@ -1,8 +1,6 @@
 import express from 'express';
 import helmet from 'helmet';
 
-import cors from 'cors';
-
 import session from 'express-session';
 import passport from 'passport';
 import Google from './middleware/Passport/Google.js';

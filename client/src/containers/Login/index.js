@@ -1,8 +1,16 @@
+import GoogleButton from 'react-google-button';
+
 export function Login() {
     return (
         <div>
-            <h1>Login</h1>
-            <a href="http://localhost:3001/auth/google">Google</a>
+            <GoogleButton
+                onClick={() => {
+                    if (process.env.NODE_ENV === 'development')
+                        window.location.href =
+                            'http://localhost:3001/auth/google';
+                    window.location.href = '/auth/google';
+                }}
+            />
         </div>
     );
 }
