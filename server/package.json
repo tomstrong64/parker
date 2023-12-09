@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon ./src/bin/www.js",
+        "start": "node ./src/bin/www.js",
+        "dev": "nodemon ./src/bin/www.js",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
-        "prod": "node ./src/bin/www.js",
         "healthcheck": "node ./src/utils/healthcheck.js"
     },
     "keywords": [],
@@ -17,9 +17,12 @@
         "dayjs": "^1.11.10",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
+        "express-session": "^1.17.3",
         "helmet": "^7.1.0",
         "human-interval": "^2.0.1",
-        "mongoose": "^7.6.2"
+        "mongoose": "^7.6.2",
+        "passport": "^0.7.0",
+        "passport-google-oauth20": "^2.0.0"
     },
     "devDependencies": {
         "jest": "^29.7.0",

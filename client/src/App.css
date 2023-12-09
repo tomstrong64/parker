@@ -1,0 +1,70 @@
+.App {
+    background-color: #272727;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.Header {
+    background-color: #1e1e24;
+    min-height: 10vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: medium;
+}
+
+.Content {
+    background-color: #1e1e24;
+    min-height: 80vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.map {
+    background-color: #1e1e24;
+    height: 80vh;
+    width: 100%;
+}
+
+.buttonBanner {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 10vh;
+    z-index: 999;
+}
+
+.button {
+    position: absolute;
+    bottom: 2.5vh;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: #3498db;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.Footer {
+    background-color: #1e1e24;
+    min-height: 10vh;
+    width: 100%;
+    /* sit at bottom */
+    bottom: 0;
+}

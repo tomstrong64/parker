@@ -8,6 +8,7 @@ const ParkingHistorySchema = new Schema(
         end: Date, // time the car left the zone
         until: Date, // time the car must leave the zone,
         notify: Number, // time to notify the user before the parking expires (mins)
+        user: { type: Schema.Types.ObjectId, ref: 'users' }, // user id
     },
     {
         timestamps: true,
