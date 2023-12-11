@@ -6,9 +6,9 @@ export function Login() {
             <GoogleButton
                 onClick={() => {
                     if (process.env.NODE_ENV === 'development')
-                        window.location.href =
-                            'http://localhost:3001/auth/google';
-                    window.location.href = '/auth/google';
+                        return (window.location.href =
+                            'http://localhost:3001/auth/google');
+                    return (window.location.href = '/auth/google');
                 }}
             />
         </div>
