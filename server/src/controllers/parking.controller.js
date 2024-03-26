@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 
 import { ParkingZones } from '../models/ParkingZones.js';
 import { ParkingHistory } from '../models/ParkingHistory.js';
-import humanInterval from 'human-interval';
 
 export const getZones = async (req, res, next) => {
     const parkingZone = await ParkingZones.find();
@@ -21,16 +20,24 @@ export const beginParking = async (req, res, next) => {
     const zone = await ParkingZones.findById(id);
     if (!zone) return res.status(404).json({ error: 'Zone not found' });
 
-    // check when parking would end if started now
-    const today = dayjs().format('dddd');
+    // get current day
     const now = dayjs();
+    const currentDay = now.format('dddd');
+
+    // add time limit to current time
     let until = now.add(zone.restrictions.time_limit, 'minute');
+    let untilDay = until.format('dddd');
 
     // if the 'until' is outside of restrictions, calculate the end time from the start of the next period
     if (
-        !zone.restrictions.days.includes(today) ||
-        zone.restrictions.end < until.format('HHmm')
+        currentDay !== untilDay || // if not the same day
+        !zone.restrictions.days.includes(untilDay) || // if not a restricted day
+        zone.restrictions.end < until.format('HHmm') // if outside of restricted time on the same day
     ) {
+        // error if days are not set
+        if (!zone.restrictions.days.length)
+            return res.status(400).json({ error: 'No days set' });
+
         // check when restrictions next apply
         let nextDay = now.add(1, 'day');
         while (!zone.restrictions.days.includes(nextDay.format('dddd'))) {
